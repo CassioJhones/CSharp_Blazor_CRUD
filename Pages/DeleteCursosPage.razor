@@ -1,0 +1,45 @@
+﻿@page "/DeleteCurso/{CurrentID}"
+@using CassioJhones.Data
+@inject CursosService _objCursoService
+@inject NavigationManager _objNavigationManager
+
+<h2>Apagar Curso</h2>
+<hr />
+<h3>Tem certeza que deseja apagar esse registro?</h3>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Id do Curso: </label>
+            <label>@objCurso.Id</label>
+        </div>
+        <div class="form-group">
+            <label>Nome: </label>
+            <label>@objCurso.TituloCurso</label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <input type="button" class="btn btn-danger" @onclick="@DeleteCurso" value="Apagar" />
+            <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancelar" />
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter] public string CurrentId { get; set; }
+    Curso objCurso = new Curso();
+    protected override async Task OnInitializedAsync()
+    {
+        objCurso = await Task.Run(() => _objCursoService.GetCursoById(Convert.ToInt32(CurrentId)));
+    }
+    protected void DeleteCurso()
+    {
+        _objCursoService.DeleteCurso(objCurso);
+        _objNavigationManager.NavigateTo("cursos");
+    }
+    void Cancel()
+    {
+        _objNavigationManager.NavigateTo("cursos");
+    }
+}

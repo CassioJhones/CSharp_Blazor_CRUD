@@ -1,0 +1,60 @@
+﻿@page "/cursos"
+@using CassioJhones.Data
+@inject CursosService _objCursoService
+
+<NavLink class="nav-link" href="AddCurso">
+    <span class="oi oi-plus" aria-hidden="true"></span>Adicionar
+</NavLink>
+
+<h1>Informações dos Cursos</h1>
+@if (objCursos == null)
+{
+    <p><em>Carregando...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titulo</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>Dia</th>
+                <th>Online</th>
+                <th>Valor</th>
+                <th>MediaAprovação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var curso in objCursos)
+            {
+                <tr>
+                    <td>@curso.Id</td>
+                    <td>@curso.TituloCurso</td>
+                    <td>@curso.Cidade</td>
+                    <td>@curso.Estado</td>
+                    <td>@curso.Dia</td>
+                    <td>@curso.Online</td>
+                    <td>@curso.Valor</td>
+                    <td>@curso.MediaAprovacao</td>
+                    <td>
+                        <a class="nav-link" href="EditCurso/@curso.Id">
+                            <span class="oi oi-pencil" aria-hidden="true"></span>Editar
+                        </a>
+                        <a class="nav-link" href="DeleteCurso/@curso.Id">
+                            <span class="oi oi-trash" aria-hidden="true"></span>Deletar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    List<Curso> objCursos;
+    protected override async Task OnInitializedAsync()
+    {
+        objCursos = await Task.Run(() => _objCursoService.GetCurso());
+    }
+}
